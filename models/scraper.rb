@@ -17,7 +17,9 @@ class Scraper
     @doc = HTTParty.get(url)
     parse_page ||= Nokogiri::HTML(@doc)
     data = parse_page.css(".indent").children
+    p data
     my_array = []
+    test_object = {}
     for line in data
       my_array.push(line.text)
     end
@@ -26,18 +28,12 @@ class Scraper
         my_array.delete(element)
       else
         split_sentence = sentence_splitter(element)
-        my_overall_object = {
-          "Steve Baker" => {split_sentence[0] => split_sentence[1]}
-        }
-        # @mp_objects.push({
-        #   split_sentence[0] => split_sentence[1]
-        # })
-        # @mp_objects.push(my_new_object)
-      end
-      # my_overall_object = {
-      #   "Steve Baker" => @mp_objects
-      # }
 
+        test_object.merge!(split_sentence[0] => split_sentence[1])
+      end
+      my_overall_object = {
+        "Steve Baker" => test_object
+      }
     end
 
     return my_overall_object
